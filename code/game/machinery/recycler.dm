@@ -12,11 +12,11 @@
 	var/safety_mode = FALSE // Temporarily stops machine if it detects a mob
 	var/icon_name = "grinder-o"
 	var/bloody = FALSE
-	var/eat_dir = WEST
 	var/amount_produced = 50
 	var/crush_damage = 1000
 	var/eat_victim_items = TRUE
 	var/item_recycle_sound = 'sound/items/welder.ogg'
+	dir = WEST
 
 /obj/machinery/recycler/Initialize(mapload)
 	var/list/allowed_materials = list(
@@ -68,6 +68,14 @@
 	The safety-sensors status light is [obj_flags & EMAGGED ? "off" : "on"]."}
 
 /obj/machinery/recycler/wrench_act(mob/living/user, obj/item/tool)
+	return default_change_direction_wrench(user, tool)
+
+/obj/machinery/recycler/default_change_direction_wrench(mob/user, obj/item/wrench)
+	if(!..())
+		return FALSE
+	return TRUE
+
+/obj/machinery/recycler/wrench_act_secondary(mob/living/user, obj/item/tool)
 	. = ..()
 	default_unfasten_wrench(user, tool)
 	return TOOL_ACT_TOOLTYPE_SUCCESS
@@ -104,7 +112,7 @@
 	. = ..()
 	if(!anchored)
 		return
-	if(border_dir == eat_dir)
+	if(border_dir == dir)
 		return TRUE
 
 /obj/machinery/recycler/proc/on_entered(datum/source, atom/movable/AM)
