@@ -81,7 +81,8 @@
 	return TOOL_ACT_TOOLTYPE_SUCCESS
 
 /obj/machinery/recycler/attackby(obj/item/I, mob/user, params)
-	if(default_deconstruction_screwdriver(user, "grinder-oOpen", "grinder-o0", I))
+	if(default_deconstruction_screwdriver(user, icon_state, icon_state, I))
+		update_appearance();
 		return
 
 	if(default_pry_open(I))
@@ -102,11 +103,17 @@
 	to_chat(user, span_notice("You use the cryptographic sequencer on [src]."))
 
 /obj/machinery/recycler/update_icon_state()
-	var/is_powered = !(machine_stat & (BROKEN|NOPOWER))
-	if(safety_mode)
-		is_powered = FALSE
-	icon_state = icon_name + "[is_powered]" + "[(bloody ? "bld" : "")]" // add the blood tag at the end
+	var/is_powered = !(machine_stat & (BROKEN|NOPOWER)) && anchored && !safety_mode
+	icon_state = is_powered ? "recycler-on" : "recycler-off"
 	return ..()
+
+/obj/machinery/recycler/update_overlays()
+	. = ..()
+	var/is_powered = !(machine_stat & (BROKEN|NOPOWER)) && anchored && !safety_mode
+	if(bloody)
+		. += is_powered ? "blood-overlay-spinning" : "blood-overlay"
+	if(panel_open)
+		. += "panel-overlay"
 
 /obj/machinery/recycler/CanAllowThrough(atom/movable/mover, border_dir)
 	. = ..()
