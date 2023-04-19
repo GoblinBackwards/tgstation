@@ -90,7 +90,6 @@
 /mob/living/simple_animal/hostile/blob/blobspore/Destroy()
 	if(factory)
 		factory.spores -= src
-		factory = null
 	if(corpse)
 		corpse.forceMove(loc)
 		corpse = null

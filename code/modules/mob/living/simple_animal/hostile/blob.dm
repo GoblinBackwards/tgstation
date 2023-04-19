@@ -39,6 +39,7 @@
 /mob/living/simple_animal/hostile/blob/Destroy()
 	if(overmind)
 		overmind.blob_mobs -= src
+	factory = null
 	return ..()
 
 /mob/living/simple_animal/hostile/blob/get_status_tab_items()
