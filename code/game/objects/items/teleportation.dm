@@ -157,7 +157,7 @@
 		portal_location = last_portal_location_ref.resolve()
 
 	if (isnull(portal_location))
-		to_chat(user, span_warning("[src] flashes briefly. No target is locked in."))
+		try_create_portal_to(user, PORTAL_LOCATION_DANGEROUS)
 		return ITEM_INTERACT_BLOCKING
 
 	try_create_portal_to(user, portal_location)
